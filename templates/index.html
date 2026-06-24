@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FuzzyLLM Select</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="page">
+
+  <header class="header">
+    <div class="header-mark">⟁</div>
+    <div class="header-text">
+      <h1>FuzzyLLM Select</h1>
+      <p class="header-sub">A fuzzy-logic recommender for choosing the right LLM</p>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <section class="intro">
+      <p>Describe what you're building, and how much each factor matters to you.
+      The system fuzzifies your priorities and each model's specs, then ranks
+      candidates using Mamdani inference.</p>
+    </section>
+
+    <form id="query-form" class="query-form">
+      <label for="query-input" class="visually-hidden">Describe your use case</label>
+      <textarea
+        id="query-input"
+        placeholder="e.g. I want to build a chatbot for medical acne detection&#10;e.g. I need a cheap and fast coding assistant for a student project"
+        rows="2"
+      ></textarea>
+      <button type="submit" id="submit-btn">
+        <span>Recommend</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h11M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </form>
+
+    <div class="manual-toggle">
+      <button id="toggle-manual" type="button">Prefer sliders instead? →</button>
+    </div>
+
+    <div id="manual-panel" class="manual-panel hidden">
+      <div class="slider-row" data-criterion="cost">
+        <label>Cost</label>
+        <input type="range" min="1" max="5" value="3">
+        <span class="slider-val">3</span>
+      </div>
+      <div class="slider-row" data-criterion="latency">
+        <label>Speed</label>
+        <input type="range" min="1" max="5" value="3">
+        <span class="slider-val">3</span>
+      </div>
+      <div class="slider-row" data-criterion="accuracy">
+        <label>Accuracy</label>
+        <input type="range" min="1" max="5" value="3">
+        <span class="slider-val">3</span>
+      </div>
+      <div class="slider-row" data-criterion="context">
+        <label>Context window</label>
+        <input type="range" min="1" max="5" value="3">
+        <span class="slider-val">3</span>
+      </div>
+      <div class="slider-row" data-criterion="multimodal">
+        <label>Multimodal support</label>
+        <input type="range" min="1" max="5" value="1">
+        <span class="slider-val">1</span>
+      </div>
+      <button id="manual-submit" type="button" class="manual-submit-btn">Recommend from sliders</button>
+    </div>
+
+    <div id="parsed-info" class="parsed-info hidden"></div>
+
+    <div id="loading" class="loading hidden">
+      <span class="loading-dot"></span><span class="loading-dot"></span><span class="loading-dot"></span>
+    </div>
+
+    <div id="results" class="results"></div>
+
+    <div id="empty-state" class="empty-state">
+      <p>No recommendation yet. Describe a use case above to begin.</p>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>Fuzzification → Rule evaluation → Aggregation → Defuzzification (centroid), per criterion, via scikit-fuzzy.</p>
+  </footer>
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
